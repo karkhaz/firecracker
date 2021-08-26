@@ -9,3 +9,5 @@ __pycache__
 .vscode
 test_results/*
 *.core
+.litani_cache_dir
+proof-output
