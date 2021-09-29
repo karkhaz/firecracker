@@ -7,6 +7,22 @@ use super::{RemoveRegionError, MAX_PAGE_COMPACT_BUFFER};
 use logger::error;
 use vm_memory::{GuestAddress, GuestMemory, GuestMemoryMmap, GuestMemoryRegion};
 
+#[cfg(rmc)]
+mod rmc_tests_2 {
+   #[no_mangle]
+   fn proof_harness_2() {
+       assert!( 1 + 1 == 2);
+   }
+}
+
+#[cfg(rmc)]
+mod rmc_tests {
+   #[no_mangle]
+   fn proof_harness() {
+       assert!( 1 + 1 == 3);
+   }
+}
+
 /// This takes a vector of page frame numbers, and compacts them
 /// into ranges of consecutive pages. The result is a vector
 /// of (start_page_frame_number, range_length) pairs.
