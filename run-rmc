@@ -105,38 +105,6 @@ class LitaniJob:
 # LitaniJob objects. They are intended to organize similar sets of jobs.
 
 
-
-@dataclasses.dataclass
-class RmcCompileJob:
-    parallel_jobs: int = None
-    cwd: pathlib.Path = pathlib.Path("src/devices/src/virtio")
-    outputs: str = "_phony_rmc_compile_output"
-    cmd: str = (
-        'RUST_BACKTRACE=1 RUSTFLAGS="-Z trim-diagnostic-paths=no '
-        '-Z codegen-backend=gotoc --cfg=rmc" RUSTC=rmc-rustc '
-        'cargo build --target x86_64-unknown-linux-gnu ')
-
-
-    def __call__(self):
-        # TODO: Figure out how to get the input files to this command.
-
-        # TODO: figure out how to get the actual list of outputs. Right
-        # now we have no idea what JSON files this command is going to
-        # emit. Passing --build-plan doesn't seem to be useful.
-
-        if self. parallel_jobs:
-            self.cmd += f" -j{self.parallel_jobs}"
-        yield LitaniJob(
-            command=self.cmd,
-            pipeline="initial build",
-            ci_stage="build",
-            cwd=self.cwd,
-            phony_outputs=self.outputs,
-            description="Run RMC to emit JSON files",
-        )
-
-
-
 @dataclasses.dataclass
 class Symtab2GbJobs:
     out_files: list = dataclasses.field(default_factory=list)
