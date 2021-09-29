@@ -139,7 +139,6 @@ class RmcCompileJob:
 
 @dataclasses.dataclass
 class Symtab2GbJobs:
-    inputs: str
     out_files: list = dataclasses.field(default_factory=list)
 
 
@@ -166,7 +165,6 @@ class Symtab2GbJobs:
                 command=f"symtab2gb {fyle} --out {out_file}",
                 pipeline="initial build",
                 ci_stage="build",
-                inputs=self.inputs,
                 outputs=out_file,
                 description=f"symtab2gb: {fyle.name}",
             )
@@ -371,10 +369,7 @@ def get_deps_dir():
 
 
 def get_litani_jobs(proof_list):
-    emit_compile_job = RmcCompileJob()
-    yield from emit_compile_job()
-
-    emit_symtab_jobs = Symtab2GbJobs(inputs=emit_compile_job.outputs)
+    emit_symtab_jobs = Symtab2GbJobs()
     yield from emit_symtab_jobs()
 
     emit_cbmc_jobs = CBMCJobs(proof_list, emit_symtab_jobs.out_files)
@@ -384,6 +379,16 @@ def get_litani_jobs(proof_list):
 async def main():
     args = get_args()
     set_up_logging(args.verbose)
+
+    cwd = pathlib.Path("src/devices/src/virtio")
+    env = {
+        "RUST_BACKTRACE": "1",
+        "RUSTFLAGS": "-Z trim-diagnostic-paths=no -Z codegen-backend=gotoc --cfg=rmc",
+        "RUSTC": "rmc-rustc",
+        **os.environ
+    }
+    cmd = ["cargo", "build", "--target", "x86_64-unknown-linux-gnu"]
+    subprocess.run(cmd, env=env, cwd=str(cwd), check=True)
 
     litani = get_litani_path()
 
