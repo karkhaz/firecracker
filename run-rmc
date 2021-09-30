@@ -30,7 +30,7 @@ import traceback
 import uuid
 
 
-DESCRIPTION = "Run all Dafny proofs in parallel and check for regressions"
+DESCRIPTION = "Run all RMC proofs in parallel and check for regressions"
 EPILOG = """\
 """
 OUT_DIR = pathlib.Path("proof-output").resolve()
