@@ -131,7 +131,7 @@ class Symtab2GbJobs:
             self.out_files.append(out_file)
             yield LitaniJob(
                 command=f"symtab2gb {fyle} --out {out_file}",
-                pipeline="initial build",
+                pipeline="initial_build",
                 ci_stage="build",
                 outputs=out_file,
                 description=f"symtab2gb: {fyle.name}",
