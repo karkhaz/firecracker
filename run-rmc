@@ -246,13 +246,6 @@ class ProofFile:
 
 
 
-def existing_path(arg):
-    path = pathlib.Path(arg)
-    if not path.exists():
-        raise argparse.ArgumentTypeError("File not found: %s" % arg)
-    return path
-
-
 def task_pool_size():
     """Only used for adding Litani jobs in parallel to reduce configuration
     time. Not for actually running the jobs, which is controlled by -j."""
