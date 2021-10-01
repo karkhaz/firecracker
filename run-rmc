@@ -133,6 +133,7 @@ class Symtab2GbJobs:
                 command=f"symtab2gb {fyle} --out {out_file}",
                 pipeline="initial_build",
                 ci_stage="build",
+                inputs=fyle,
                 outputs=out_file,
                 description=f"symtab2gb: {fyle.name}",
             )
